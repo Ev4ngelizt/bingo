@@ -1,0 +1,124 @@
+[gd_scene load_steps=3 format=3 uid="uid://b50uui4mo7815"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_3eyjy"]
+
+[sub_resource type="SystemFont" id="SystemFont_ngb7w"]
+
+[node name="game" type="Control"]
+layout_mode = 3
+anchor_left = 0.5
+anchor_top = 0.25
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+script = ExtResource("1_3eyjy")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+offset_left = -268.5
+offset_top = -69.0
+offset_right = -200.5
+offset_bottom = -43.0
+text = "Grid title"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = -266.5
+offset_top = -32.0
+offset_right = -203.5
+offset_bottom = 34.0
+
+[node name="Reset" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Shuffle" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Shuffle"
+
+[node name="GridDisplay" type="GridContainer" parent="."]
+layout_mode = 2
+offset_left = -24.0
+offset_top = -70.5
+offset_right = 276.0
+offset_bottom = 229.5
+columns = 2
+
+[node name="Button" type="Button" parent="GridDisplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GridDisplay/Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_ngb7w")
+theme_override_font_sizes/font_size = 12
+text = "Ceci est un test où j'écris un texte assez long pour voir comment se comporte le label"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+text_overrun_behavior = 4
+
+[node name="Button6" type="Button" parent="GridDisplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GridDisplay/Button6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Cette fois ci j'essaie le richtextlabel car je me dis qu'il va aider"
+
+[node name="Button5" type="Button" parent="GridDisplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GridDisplay/Button5"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Button4" type="Button" parent="GridDisplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GridDisplay/Button4"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Button3" type="Button" parent="GridDisplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GridDisplay/Button3"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Button2" type="Button" parent="GridDisplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GridDisplay/Button2"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[connection signal="pressed" from="VBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="VBoxContainer/Shuffle" to="." method="_on_shuffle_pressed"]

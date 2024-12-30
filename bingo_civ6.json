@@ -1,0 +1,13 @@
+{
+	"title": "Premier bingo civ 6",
+	"size": { "rows": 5, "columns": 5 },
+	"author": "",
+	"description": "Le premier Bingo civ 6 qu'on a fait. Marc contre Sergei, Sergei a gagné",
+	"grid": [
+		["Fer, chevaux et salpêtre", "Charbon, Alluminium, Petrole", "Trois merveilles dans une même ville", "Avoir plus de 100 science par tour", "Avoir le premier savant illustre"],
+		["Avoir un musée à thème", "Campus +5", "Age Heroique", "Avoir une merveille dans chaque ville", "Unité militaire (dernière promotion)"],
+		["Avoir une relique", "Envahir une cité état", "Avoir la première religion", "Prendre la première société secrète qu'on découvre", "Suzerain de 6 cités états"],
+		["Place du théâtre +6", "Zone industrielle +8", "Avoir toutes les promotions de Victor", "Personnage illustre de chaque type", "Faire une ville sans eau et sans aqueduc"],
+		["Avoir un monopole", "Canal de Panam ou Golden Gate", "Faire une ville sur une mini île", "Avoir 500 or par tour", "Avoir trois produit d'une corporation"]
+	]
+}

@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=3 uid="uid://h8x3niwda2fq"]
+
+[ext_resource type="Script" path="res://MainMenu.gd" id="1_kyjyx"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+size_flags_stretch_ratio = 2.0
+script = ExtResource("1_kyjyx")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+initial_position = 2
+title = "Open a File"
+size = Vector2i(500, 400)
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("*.json")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -288.0
+offset_top = -163.0
+offset_right = 289.0
+offset_bottom = 162.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Bingo interactif"
+
+[node name="HostButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "127.0.0.1"
+
+[node name="JoinButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="CreateButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Create new grid"
+
+[node name="ImportGrid" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Import grid"
+
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ImportGrid" to="." method="_on_import_grid_pressed"]

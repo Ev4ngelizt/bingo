@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://do5dvd3tn0wk4"]
+
+[ext_resource type="Script" path="res://import_grid.gd" id="1_is83d"]
+
+[node name="ImportGrid" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_is83d")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+initial_position = 2
+title = "Open a File"
+size = Vector2i(500, 400)
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("*.json")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Import grid"
+
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="Button" to="." method="_on_import_button_pressed"]
