@@ -1,6 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://b50uui4mo7815"]
+[gd_scene load_steps=8 format=3 uid="uid://b50uui4mo7815"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_3eyjy"]
+[ext_resource type="Texture2D" uid="uid://lhlnei06m0ye" path="res://checkerboard_texture_64x64.png" id="2_dk47x"]
+[ext_resource type="Script" path="res://panel.gd" id="3_o0lxf"]
+[ext_resource type="Theme" uid="uid://ipadcv8pakcc" path="res://main_menu.tres" id="4_m6gwf"]
+[ext_resource type="AudioStream" uid="uid://d3wmpu5q8fk2k" path="res://button-pressed.mp3" id="5_id2er"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6dipg"]
+texture = ExtResource("2_dk47x")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
 
 [sub_resource type="SystemFont" id="SystemFont_ngb7w"]
 
@@ -14,6 +23,16 @@ offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(2, 2)
 script = ExtResource("1_3eyjy")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -883.0
+offset_top = -412.0
+offset_right = 290.0
+offset_bottom = 241.0
+scale = Vector2(2, 2)
+theme_override_styles/panel = SubResource("StyleBoxTexture_6dipg")
+script = ExtResource("3_o0lxf")
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 2
@@ -30,13 +49,20 @@ offset_top = -32.0
 offset_right = -203.5
 offset_bottom = 34.0
 
-[node name="Reset" type="Button" parent="VBoxContainer"]
+[node name="Back" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Reset"
+theme = ExtResource("4_m6gwf")
+text = "Return"
 
 [node name="Shuffle" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("4_m6gwf")
 text = "Shuffle"
+
+[node name="Reset" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_m6gwf")
+text = "Reset"
 
 [node name="GridDisplay" type="GridContainer" parent="."]
 layout_mode = 2
@@ -44,6 +70,7 @@ offset_left = -24.0
 offset_top = -70.5
 offset_right = 276.0
 offset_bottom = 229.5
+theme = ExtResource("4_m6gwf")
 columns = 2
 
 [node name="Button" type="Button" parent="GridDisplay"]
@@ -120,5 +147,26 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
-[connection signal="pressed" from="VBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[node name="Window" type="Window" parent="."]
+initial_position = 2
+size = Vector2i(300, 200)
+visible = false
+
+[node name="Label" type="Label" parent="Window"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Si tu vois ceci, c'est que mon jeu est mal codé"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_id2er")
+
+[connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="VBoxContainer/Shuffle" to="." method="_on_shuffle_pressed"]
+[connection signal="pressed" from="VBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="close_requested" from="Window" to="." method="_on_window_close_requested"]

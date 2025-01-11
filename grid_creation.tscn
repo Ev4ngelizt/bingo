@@ -1,0 +1,141 @@
+[gd_scene load_steps=2 format=3 uid="uid://duhgn577mvxgq"]
+
+[ext_resource type="Script" path="res://GridCreation.gd" id="1_1wsyg"]
+
+[node name="GridCreation" type="Window"]
+auto_translate_mode = 1
+initial_position = 2
+size = Vector2i(1152, 648)
+visible = false
+script = ExtResource("1_1wsyg")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -83.5
+offset_top = -20.0
+offset_right = 83.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "Please select grid size"
+
+[node name="GridContainer" type="GridContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="RowsLabel" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Rows :"
+
+[node name="RowsOption" type="OptionButton" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="ColumnsLabel" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Columns :"
+
+[node name="ColumnsOption" type="OptionButton" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="CreateGridButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "Create Grid"
+
+[node name="GridContent" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -39.5
+offset_top = -39.0
+offset_right = 39.5
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/GridContent"]
+layout_mode = 2
+
+[node name="TitleLine" type="LineEdit" parent="Control/GridContent/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Title"
+
+[node name="AuthorLine" type="LineEdit" parent="Control/GridContent/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Author"
+
+[node name="DescriptionLines" type="TextEdit" parent="Control/GridContent/VBoxContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Description "
+wrap_mode = 1
+scroll_fit_content_height = true
+
+[node name="ContentLines" type="TextEdit" parent="Control/GridContent"]
+custom_minimum_size = Vector2(600, 500)
+layout_mode = 2
+placeholder_text = "Insert the content of the cells here. One line for each cell"
+wrap_mode = 1
+scroll_fit_content_height = true
+
+[node name="Buttons" type="VBoxContainer" parent="Control/GridContent"]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="Control/GridContent/Buttons"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "Save Grid"
+
+[node name="ChangeSize" type="Button" parent="Control/GridContent/Buttons"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Change Size"
+
+[node name="Exit" type="Button" parent="Control/GridContent/Buttons"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+tooltip_text = "You will lose all not saved data"
+text = "Exit"
+
+[node name="Label2" type="Label" parent="Control/GridContent/Buttons"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/GridContent/Buttons"]
+layout_mode = 2
+text = "Please enter ? more lines"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
+initial_position = 2
+size = Vector2i(800, 600)
+access = 2
+root_subfolder = "./Grids"
+filters = PackedStringArray("*.json")
+
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="pressed" from="Control/VBoxContainer/CreateGridButton" to="." method="_on_create_grid_button_pressed"]
+[connection signal="text_changed" from="Control/GridContent/ContentLines" to="." method="_on_content_lines_text_changed"]
+[connection signal="pressed" from="Control/GridContent/Buttons/Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Control/GridContent/Buttons/ChangeSize" to="." method="_on_change_size_pressed"]
+[connection signal="pressed" from="Control/GridContent/Buttons/Exit" to="." method="_on_exit_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

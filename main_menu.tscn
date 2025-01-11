@@ -1,26 +1,48 @@
-[gd_scene load_steps=2 format=3 uid="uid://h8x3niwda2fq"]
+[gd_scene load_steps=7 format=3 uid="uid://h8x3niwda2fq"]
 
 [ext_resource type="Script" path="res://MainMenu.gd" id="1_kyjyx"]
+[ext_resource type="Theme" uid="uid://ipadcv8pakcc" path="res://main_menu.tres" id="2_g2v1e"]
+[ext_resource type="Texture2D" uid="uid://lhlnei06m0ye" path="res://checkerboard_texture_64x64.png" id="2_npw5b"]
+[ext_resource type="Script" path="res://panel.gd" id="3_fc01m"]
+
+[sub_resource type="Theme" id="Theme_k2ouy"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g38dp"]
+texture = ExtResource("2_npw5b")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -362.0
+offset_bottom = -224.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
 size_flags_stretch_ratio = 2.0
+theme = SubResource("Theme_k2ouy")
 script = ExtResource("1_kyjyx")
 
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -290.0
+offset_top = -193.0
+offset_right = 242.0
+offset_bottom = 150.0
+scale = Vector2(2, 2)
+theme_override_styles/panel = SubResource("StyleBoxTexture_g38dp")
+script = ExtResource("3_fc01m")
+
 [node name="FileDialog" type="FileDialog" parent="."]
-initial_position = 2
 title = "Open a File"
+initial_position = 2
 size = Vector2i(500, 400)
 ok_button_text = "Open"
 file_mode = 0
+access = 2
 filters = PackedStringArray("*.json")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
@@ -28,10 +50,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -288.0
-offset_top = -163.0
-offset_right = 289.0
-offset_bottom = 162.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -215.0
+offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -40,29 +62,37 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_g2v1e")
+theme_override_font_sizes/font_size = 36
 text = "Bingo interactif"
-
-[node name="HostButton" type="Button" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-text = "Host"
-
-[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-placeholder_text = "127.0.0.1"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="JoinButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_g2v1e")
 text = "Join"
+
+[node name="HostButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_g2v1e")
+text = "Host"
 
 [node name="CreateButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_g2v1e")
 text = "Create new grid"
 
 [node name="ImportGrid" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_g2v1e")
+action_mode = 0
 text = "Import grid"
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="mouse_entered" from="CenterContainer/VBoxContainer/JoinButton" to="CenterContainer/VBoxContainer/JoinButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBoxContainer/JoinButton" to="CenterContainer/VBoxContainer/JoinButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ImportGrid" to="." method="_on_import_grid_pressed"]

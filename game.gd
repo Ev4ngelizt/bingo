@@ -1,8 +1,12 @@
 extends Control
 
+var client
 var grid_state: Array = []
-var player_colors = [Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1), Color(1, 1, 0)]
-var peer_color_map = {}  # Maps peer IDs to their colors
+var custom_theme
+
+func _on_ready():
+	custom_theme = load("res://main_menu.tres")
+
 func display_grid(grid_data):
 	
 	$Title.text = grid_data.title
@@ -15,10 +19,10 @@ func display_grid(grid_data):
 			var button = Button.new()
 			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			button.size_flags_vertical = Control.SIZE_EXPAND_FILL
-			
 			var label = Label.new()
 			button.add_child(label)
-			
+			button.focus_mode = Control.FOCUS_NONE
+		
 			label.text = grid_data.grid[row_index][col_index]
 			label.anchors_preset = PRESET_FULL_RECT
 			label.size_flags_horizontal = SIZE_EXPAND_FILL
@@ -32,7 +36,7 @@ func display_grid(grid_data):
 			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 			label.set_autowrap_mode(TextServer.AUTOWRAP_WORD)  # Enable word-based wrapping
 			label.add_theme_font_size_override("font_size", 10)
-			
+			label.add_theme_color_override("font_color", "gray")
 			button.tooltip_text = label.text 
 			button.set_meta("row", row_index)
 			button.set_meta("col", col_index)
@@ -40,7 +44,6 @@ func display_grid(grid_data):
 			$GridDisplay.add_child(button)
 			if grid_state[row_index][col_index] != 0:
 				button.modulate = get_player_color(grid_state[row_index][col_index])
-				button.disabled = true
 	return
 func _ready():
 	multiplayer.connect("peer_connected", Callable(self, "_on_peer_connected"))
@@ -67,23 +70,34 @@ func find_button(row: int, col: int) -> Button:
 @rpc("call_local", "any_peer")
 func mark_cell(row: int, col: int, peer_id: int):
 	# Check if the cell is already marked
-	if grid_state[row][col] != 0:
+	if grid_state[row][col] != peer_id and grid_state[row][col] != 0:
 		print("Cell already marked!")
 		return
-	grid_state[row][col] = peer_id
-	var button = find_button(row, col)
-	if button:
-		button.modulate = get_player_color(peer_id)
-		button.disabled = true
-	print("Cell", row, col, "marked by player", peer_id)
-
+	elif grid_state[row][col] == peer_id:
+		grid_state[row][col] = 0
+		var button = find_button(row, col)
+		if button:
+			button.modulate = "white"
+			button.disabled = false
+		print("Cell", row, col, "unmarked by player", peer_id)
+	else:
+		grid_state[row][col] = peer_id
+		var button = find_button(row, col)
+		if button:
+			button.modulate = get_player_color(peer_id)
+			button.disabled = false
+		$AudioStreamPlayer.play()
+		print("Cell", row, col, "marked by player", peer_id)
+		
 func get_player_color(peer_id: int):
-	match peer_id % 4:  # Cycle through 4 basic colors
-		0: return Color(1, 0, 0)  # Red
-		1: return Color(0, 1, 0)  # Green
-		2: return Color(0, 0, 1)  # Blue
-		3: return Color(1, 1, 0)  # Yellow
-	return Color(1, 1, 1)  # Default (white)
+	if peer_id in Global.peer_color_map:
+		return Global.peer_color_map[peer_id]
+	#match peer_id % 4:  # Cycle through 4 basic colors
+		#0: return Color(1, 0, 0)  # Red
+		#1: return Color(0, 1, 0)  # Green
+		#2: return Color(0, 0, 1)  # Blue
+		#3: return Color(1, 1, 0)  # Yellow
+	return Color(0, 1, 0)  # Default (white)
 		
 func _on_cell_pressed(row, col):
 	var peer_id = multiplayer.multiplayer_peer.get_unique_id()
@@ -150,6 +164,8 @@ func check_win():
 	for row in grid_state:
 		if all_elements_equal(row) and row[0] != 0:
 			print("A player has won the game: ", row[0])
+			$Window.popup()
+			$Window/Label.text = "A player won the game !"
 			return row[0]
 	for col in range(Global.custom_grid.size.columns):
 		var column = []
@@ -157,6 +173,8 @@ func check_win():
 			column.append(grid_state[row][col])
 		if all_elements_equal(column) and column[0] != 0:
 			print("A player has won the game: ", column[0])
+			$Window.popup()
+			$Window/Label.text = "A player won the game !"
 			return column[0]
 			
 func check_blocked():
@@ -184,37 +202,58 @@ func check_blocked():
 		if not col_blocked:
 			return false
 	print("Grid is blocked, shuffle is required")
+	$Window/Label.text = "Grid is blocked, host needs to shuffle"
+	$Window.popup()
 	return true
 
 @rpc("call_remote")
-func sync_grid(grid_data, grid_state_data):
+func sync_grid(grid, new_grid_state):
 # Update the local grid with the received data
-	for row_index in range(grid_data.size()):
-		for col_index in range(grid_data[row_index].size()):
-			Global.custom_grid.grid[row_index][col_index] = grid_data[row_index][col_index]
-			grid_state = grid_state_data
-	
+	#for row_index in range(grid_data.size()):
+		#for col_index in range(grid_data[row_index].size()):
+			#Global.custom_grid.grid[row_index][col_index] = grid_data[row_index][col_index]
+			#grid_state = grid_state_data
+	Global.custom_grid = grid
+	grid_state = new_grid_state
 	# Refresh the grid display
 	display_grid(Global.custom_grid)
+
+@rpc("call_remote")
+func sync_colors(peer_color_map=Global.peer_color_map):
+	Global.peer_color_map = peer_color_map
+	print("Colors synchronized")
 	
 func broadcast_grid():
 	if multiplayer.is_server():
 		var grid_data = Global.custom_grid.grid
-		rpc("sync_grid", grid_data, grid_state)
+		rpc("sync_grid", Global.custom_grid, grid_state)
 		
 func _on_peer_connected(peer_id: int):
 	broadcast_grid()
-	if not peer_id in peer_color_map:
-		if player_colors.size() > 0:
-			peer_color_map[peer_id] = player_colors.pop_front()  # Assign a unique color
-			print("Assigned color to peer:", peer_id, peer_color_map[peer_id])
+	print("Connected :", peer_id)
+	if not peer_id in Global.peer_color_map:
+		print("Player not in color map")
+		if Global.player_colors:
+			Global.peer_color_map[peer_id] =  Global.player_colors[-1]# Assign a unique color
+			Global.player_colors.erase(-1)
+			print("Player added to global color map")
 		else:
-			print("No more colors available for peer:", peer_id)
+			print("Unable to assign a color to player ", peer_id)
+	if multiplayer.is_server():
+		rpc("sync_colors", Global.peer_color_map)
 
 func _on_peer_disconnected(peer_id: int):
 	print("Peer disconnected:", peer_id)
-	if peer_id in peer_color_map:
-		player_colors.append(peer_color_map[peer_id])  # Reclaim the color
-		peer_color_map.erase(peer_id)
-				
-			
+	if peer_id in Global.peer_color_map:
+		Global.player_colors.append(Global.peer_color_map[peer_id])  # Reclaim the color
+		Global.peer_color_map.erase(peer_id)
+		if multiplayer.is_server():
+			rpc("sync_colors")
+
+func _on_back_pressed():
+	multiplayer.multiplayer_peer.close()
+	get_tree().change_scene_to_file("res://main_menu.tscn")
+	
+
+func _on_window_close_requested() -> void:
+	$Window.hide()

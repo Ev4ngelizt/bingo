@@ -1,0 +1,229 @@
+[gd_scene load_steps=3 format=3 uid="uid://h8x3niwda2fq"]
+
+[ext_resource type="Script" path="res://MainMenu.gd" id="1_kyjyx"]
+[ext_resource type="Script" path="res://GridCreation.gd" id="2_ocwdh"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+size_flags_stretch_ratio = 2.0
+script = ExtResource("1_kyjyx")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+initial_position = 2
+size = Vector2i(500, 400)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.json")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+offset_right = 577.0
+offset_bottom = 325.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Bingo interactif"
+
+[node name="HostButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="CreateButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Create new grid"
+
+[node name="ImportGrid" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Import grid"
+
+[node name="Window" type="Window" parent="."]
+initial_position = 2
+size = Vector2i(500, 200)
+visible = false
+popup_window = true
+
+[node name="Control" type="Control" parent="Window"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -49.5
+offset_top = -48.0
+offset_right = 49.5
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Window/Control/VBoxContainer"]
+layout_mode = 2
+text = "Enter host IP"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Window/Control/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "127.0.0.1"
+
+[node name="Button" type="Button" parent="Window/Control/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="GridCreation" type="Window" parent="."]
+initial_position = 2
+size = Vector2i(1152, 648)
+visible = false
+script = ExtResource("2_ocwdh")
+
+[node name="Control" type="Control" parent="GridCreation"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridCreation/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -83.5
+offset_top = -20.0
+offset_right = 83.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="GridCreation/Control/VBoxContainer"]
+layout_mode = 2
+text = "Please select grid size"
+
+[node name="GridContainer" type="GridContainer" parent="GridCreation/Control/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="RowsLabel" type="Label" parent="GridCreation/Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Rows :"
+
+[node name="RowsOption" type="OptionButton" parent="GridCreation/Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="ColumnsLabel" type="Label" parent="GridCreation/Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Columns :"
+
+[node name="ColumnsOption" type="OptionButton" parent="GridCreation/Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="CreateGridButton" type="Button" parent="GridCreation/Control/VBoxContainer"]
+layout_mode = 2
+text = "Create Grid"
+
+[node name="GridContent" type="HBoxContainer" parent="GridCreation/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -39.5
+offset_top = -39.0
+offset_right = 39.5
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridCreation/Control/GridContent"]
+layout_mode = 2
+
+[node name="TitleLine" type="LineEdit" parent="GridCreation/Control/GridContent/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Title"
+
+[node name="AuthorLine" type="LineEdit" parent="GridCreation/Control/GridContent/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Author"
+
+[node name="DescriptionLines" type="TextEdit" parent="GridCreation/Control/GridContent/VBoxContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Description "
+wrap_mode = 1
+scroll_fit_content_height = true
+
+[node name="ContentLines" type="TextEdit" parent="GridCreation/Control/GridContent"]
+custom_minimum_size = Vector2(600, 500)
+layout_mode = 2
+placeholder_text = "Insert the content of the cells here. One line for each cell"
+wrap_mode = 1
+scroll_fit_content_height = true
+
+[node name="Buttons" type="VBoxContainer" parent="GridCreation/Control/GridContent"]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="GridCreation/Control/GridContent/Buttons"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "Save Grid"
+
+[node name="ChangeSize" type="Button" parent="GridCreation/Control/GridContent/Buttons"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Change Size"
+
+[node name="Return2" type="Button" parent="GridCreation/Control/GridContent/Buttons"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Exit"
+
+[node name="Label2" type="Label" parent="GridCreation/Control/GridContent/Buttons"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GridCreation/Control/GridContent/Buttons"]
+layout_mode = 2
+text = "Please enter ? more lines"
+
+[node name="FileDialog" type="FileDialog" parent="GridCreation"]
+access = 2
+
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ImportGrid" to="." method="_on_import_grid_pressed"]
+[connection signal="close_requested" from="Window" to="." method="_on_window_close_requested"]
+[connection signal="pressed" from="Window/Control/VBoxContainer/Button" to="." method="_on_pop_up_join_button_pressed"]
+[connection signal="close_requested" from="GridCreation" to="." method="_on_grid_creation_close_requested"]
+[connection signal="ready" from="GridCreation" to="GridCreation" method="_on_ready"]
+[connection signal="pressed" from="GridCreation/Control/VBoxContainer/CreateGridButton" to="GridCreation" method="_on_create_grid_button_pressed"]
+[connection signal="text_changed" from="GridCreation/Control/GridContent/ContentLines" to="GridCreation" method="_on_content_lines_text_changed"]
+[connection signal="pressed" from="GridCreation/Control/GridContent/Buttons/Save" to="GridCreation" method="_on_save_pressed"]
